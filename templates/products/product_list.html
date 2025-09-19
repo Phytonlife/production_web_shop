@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Каталог{% endblock %}
+
+{% block content %}
+  <h1 class="text-3xl font-bold mb-4">Каталог</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for product in products %}
+      <div class="bg-white shadow-md rounded-lg p-4">
+        <a href="{% url 'products:product_detail' product.slug %}">
+          <h2 class="text-xl font-bold">{{ product.name }}</h2>
+        </a>
+        <p class="text-gray-600">{{ product.category }}</p>
+        <p class="text-lg font-bold mt-2">{{ product.price }} руб.</p>
+        <a href="{% url 'orders:add_to_cart' product.id %}" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">Добавить в корзину</a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

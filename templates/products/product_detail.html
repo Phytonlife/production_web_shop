@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div>
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-auto rounded-lg shadow-md">
+      {% endif %}
+    </div>
+    <div>
+      <h1 class="text-4xl font-bold mb-4">{{ product.name }}</h1>
+      <p class="text-gray-600 mb-4">{{ product.category }}</p>
+      <p class="text-2xl font-bold text-blue-600 mb-4">{{ product.price }} руб.</p>
+      <p class="text-gray-800 mb-6">{{ product.description|linebreaks }}</p>
+      <a href="{% url 'orders:add_to_cart' product.id %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold">Добавить в корзину</a>
+    </div>
+  </div>
+{% endblock %}

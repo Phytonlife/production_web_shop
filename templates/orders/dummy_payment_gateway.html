@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Dummy Payment Gateway{% endblock %}
+
+{% block content %}
+  <h1 class="text-3xl font-bold mb-4">Dummy Payment Gateway</h1>
+  <div class="bg-white shadow-md rounded-lg p-8">
+    <p class="text-xl mb-4">Order ID: {{ order.id }}</p>
+    <p class="text-xl mb-4">Total amount: {{ order.total_amount }} руб.</p>
+    <div class="flex justify-around mt-6">
+      <form action="{% url 'orders:webhook' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="order_id" value="{{ order.id }}">
+        <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold">Success</button>
+      </form>
+      <a href="{% url 'orders:payment_failed' order.id %}" class="bg-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold">Fail</a>
+    </div>
+  </div>
+{% endblock %}

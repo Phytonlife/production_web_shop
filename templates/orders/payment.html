@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+<div class="container mx-auto mt-10 max-w-lg">
+    <div class="bg-white shadow-md rounded-lg p-8">
+        <h1 class="text-3xl font-bold mb-6 text-center">Оплата заказа #{{ order.id }}</h1>
+        <div class="mb-6">
+            <p class="text-xl text-center">Сумма к оплате: <span class="font-bold">{{ order.total_amount }} руб.</span></p>
+        </div>
+        <form action="{% url 'orders:webhook' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+            <div class="mb-4">
+                <label for="card_number" class="block text-gray-700 font-semibold mb-2">Номер карты</label>
+                <input type="text" id="card_number" name="card_number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="xxxx-xxxx-xxxx-xxxx">
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="expiry_date" class="block text-gray-700 font-semibold mb-2">Срок действия</label>
+                    <input type="text" id="expiry_date" name="expiry_date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="MM/YY">
+                </div>
+                <div>
+                    <label for="cvv" class="block text-gray-700 font-semibold mb-2">CVV</label>
+                    <input type="text" id="cvv" name="cvv" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="xxx">
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors">Оплатить</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

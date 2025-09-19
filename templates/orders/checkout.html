@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container mx-auto mt-10">
+    <h1 class="text-3xl font-bold mb-6">Оформление заказа</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-2xl font-bold mb-4">Ваша корзина</h2>
+                <div class="divide-y divide-gray-200">
+                    {% for item in cart.items.all %}
+                    <div class="flex items-center py-4">
+                        <div class="flex-shrink-0">
+                            {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-24 h-24 object-cover rounded-lg">
+                            {% endif %}
+                        </div>
+                        <div class="ml-4 flex-grow">
+                            <h3 class="text-lg font-semibold">{{ item.product.name }}</h3>
+                            <p class="text-gray-600">Количество: {{ item.quantity }}</p>
+                        </div>
+                        <div class="text-lg font-semibold">
+                            {{ item.product.price }} руб.
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p>Ваша корзина пуста.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="lg:col-span-1">
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-2xl font-bold mb-4">Итого</h2>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-600">Сумма</span>
+                    <span class="text-lg font-semibold">{{ cart.get_total_price|floatformat:2 }} руб.</span>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-600">Доставка</span>
+                    <span class="text-lg font-semibold">0.00 руб.</span>
+                </div>
+                <div class="border-t border-gray-200 my-4"></div>
+                <div class="flex justify-between items-center font-bold text-xl">
+                    <span>Итого к оплате</span>
+                    <span>{{ cart.get_total_price|floatformat:2 }} руб.</span>
+                </div>
+                <form method="post" class="mt-6">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors">Оформить заказ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
