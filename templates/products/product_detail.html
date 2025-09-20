@@ -3,18 +3,52 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div>
-      {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-auto rounded-lg shadow-md">
-      {% endif %}
+<div class="container mx-auto mt-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-auto rounded-lg shadow-lg">
+            {% else %}
+                <div class="w-full h-96 bg-gray-200 flex items-center justify-center rounded-lg shadow-lg">
+                    <span class="text-gray-500">No Image</span>
+                </div>
+            {% endif %}
+        </div>
+        <div>
+            <h1 class="text-5xl font-bold text-gray-800 mb-4">{{ product.name }}</h1>
+            <p class="text-gray-600 text-lg mb-4">{{ product.category.name }}</p>
+            <p class="text-4xl font-bold text-blue-600 mb-6">{{ product.price }} ₽</p>
+            <div class="prose max-w-none mb-6">
+                {{ product.description|linebreaks }}
+            </div>
+            <a href="{% url 'orders:add_to_cart' product.id %}" class="w-full bg-blue-600 text-white py-4 px-8 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors">Добавить в корзину</a>
+        </div>
     </div>
-    <div>
-      <h1 class="text-4xl font-bold mb-4">{{ product.name }}</h1>
-      <p class="text-gray-600 mb-4">{{ product.category }}</p>
-      <p class="text-2xl font-bold text-blue-600 mb-4">{{ product.price }} руб.</p>
-      <p class="text-gray-800 mb-6">{{ product.description|linebreaks }}</p>
-      <a href="{% url 'orders:add_to_cart' product.id %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold">Добавить в корзину</a>
+
+    <div class="mt-16">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Похожие товары</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {% for related_product in related_products %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                <a href="{% url 'products:product_detail' related_product.slug %}">
+                    {% if related_product.image %}
+                        <img src="{{ related_product.image.url }}" alt="{{ related_product.name }}" class="w-full h-64 object-cover">
+                    {% else %}
+                        <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                            <span class="text-gray-500">No Image</span>
+                        </div>
+                    {% endif %}
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">{{ related_product.name }}</h3>
+                        <p class="text-gray-600 mb-4">{{ related_product.category.name }}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-blue-600">{{ related_product.price }} ₽</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-  </div>
+</div>
 {% endblock %}

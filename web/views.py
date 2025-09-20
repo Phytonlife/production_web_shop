@@ -1,5 +1,5 @@
 from django.views.generic import ListView
-from products.models import Product
+from products.models import Product, Category
 
 class HomePageView(ListView):
     model = Product
@@ -7,4 +7,9 @@ class HomePageView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        return Product.objects.filter(is_active=True)[:6] # Показываем 6 последних товаров
+        return Product.objects.filter(is_active=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.filter(parent__isnull=True)
+        return context

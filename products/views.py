@@ -15,6 +15,11 @@ class ProductDetailView(DetailView):
     template_name = 'products/product_detail.html'
     context_object_name = 'product'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['related_products'] = Product.objects.filter(category=self.object.category).exclude(id=self.object.id).order_by('?')[:4]
+        return context
+
 # API views
 from django.core.cache import cache
 from rest_framework import viewsets
