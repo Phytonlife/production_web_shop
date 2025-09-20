@@ -1,19 +1,18 @@
 #!/bin/sh
 
-# Ожидаем, пока база данных станет доступной
-# Это важно, чтобы Django не пытался подключиться к еще не запущенной БД
-until nc -z db 5432; do
-  echo "Waiting for db to be ready..."
-  sleep 2
-done
+echo "Applying database migrations..."
+python manage.py migrate --noinput
 
-echo "Db is ready!"
-
-# Применяем миграции базы данных
-python manage.py migrate
-
-# Собираем статические файлы
+echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
-# Запускаем Gunicorn
+echo "Creating superuser if it does not exist..."
+python manage.py shell -c "
+from django.contrib.auth import get_user_model;
+User = get_user_model();
+if not User.objects.filter(username='admin').exists():
+    User.objects.create_superuser('admin', 'admin@example.com', 'Admin123!')
+"
+
+echo "Starting Gunicorn..."
 exec gunicorn core.wsgi:application --bind 0.0.0.0:8000

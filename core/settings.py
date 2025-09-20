@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware', # Добавлено для мультиязычности
     'django.middleware.common.CommonMiddleware',
@@ -126,9 +127,10 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = ['127.0.0.1'] 
   
 # Static files (CSS, JavaScript, Images)  
-STATIC_URL = 'static/'  
+STATIC_URL = '/static/'
 STATIC_ROOT = '/vol/web/static'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
   
 MEDIA_ROOT = '/vol/web/media' 
   
